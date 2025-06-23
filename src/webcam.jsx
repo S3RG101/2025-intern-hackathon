@@ -54,7 +54,6 @@ const WebcamInput = () => {
       // Start the frame analysis loop
       analyzeFrame();
 
-
   };
 
   return (
