@@ -10,7 +10,7 @@ const WebcamInput = () => {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         videoRef.current.srcObject = stream;
         
-        // this is problematic in chrome rip
+        // does not work in chrome browser
         // videoRef.current.play();
 
         // Handle the play() promise
