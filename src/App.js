@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import WebcamInput from './webcam';
 
 function App() {
   return (
@@ -17,6 +18,10 @@ function App() {
         >
           Learn React
         </a>
+      </header>
+      <header>
+        <h1> Testing camera</h1>
+        <WebcamInput />
       </header>
     </div>
   );
