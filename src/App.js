@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import WebcamInput from './webcam';
 import Timer from './timer';
+import ObjectDetection from './ModelComponents/ObjectDetection';
 
 function App() {
   return (
@@ -11,7 +12,10 @@ function App() {
       </header>
       <header>
         <h1> Testing camera</h1>
-        <WebcamInput />
+        {/* <WebcamInput /> */}
+
+        {/* Adding object detection model */}
+        <ObjectDetection />
       </header>
     </div>
   );
