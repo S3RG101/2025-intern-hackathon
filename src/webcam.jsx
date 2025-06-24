@@ -28,8 +28,25 @@ const WebcamInput = () => {
     const startVideo = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+        videoRef.current.srcObject = stream;
+        
+        // does not work in chrome browser
+        // videoRef.current.play();
+
+        // Handle the play() promise
+        const playPromise = videoRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log("Video playback started successfully.");
+            })
+            .catch((error) => {
+              console.error("Error starting video playback:", error);
+            });
+
         }
       } catch (err) {
         console.error("Error accessing webcam:", err);
