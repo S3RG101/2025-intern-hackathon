@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import * as tf from '@tensorflow/tfjs';
 import * as faceapi from 'face-api.js';
 
 const WebcamInput = () => {
@@ -48,6 +49,7 @@ const WebcamInput = () => {
             });
 
         }
+      }
       } catch (err) {
         console.error("Error accessing webcam:", err);
       }
