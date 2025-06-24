@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.camera-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 180px; /* Smaller width */
+  height: 135px; /* Smaller height */
+}
