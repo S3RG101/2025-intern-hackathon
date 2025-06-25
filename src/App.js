@@ -3,6 +3,7 @@ import './App.css';
 import WebcamInput from './webcam';
 import Timer from './timer';
 import ObjectDetection from './ModelComponents/ObjectDetection';
+import FaceAttentionDetection from './ModelComponents/FaceAttentionDetection';
 
 function App() {
   return (
@@ -15,7 +16,8 @@ function App() {
         {/* <WebcamInput /> */}
 
         {/* Adding object detection model */}
-        <ObjectDetection />
+        {/* <ObjectDetection /> */}
+        <FaceAttentionDetection />
       </header>
     </div>
   );
