@@ -18,7 +18,7 @@ function App() {
     }
     setObjectDetectionBanner(bannerContent);
   }, []);
-
+  
   return (
     <div className="App" style={{ position: 'relative', minHeight: '100vh' }}>
       {/* Webcam, detection, and Start/Stop button in top left, full logic */}
