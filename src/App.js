@@ -19,7 +19,8 @@ function App() {
 
         {/* Adding object detection model */}
         {/* <ObjectDetection /> */}
-        <FaceAttentionDetection />
+        {/* <FaceAttentionDetection /> */}
+        <FaceAttentionDetection /> 
       </header>
     </div>
   );
