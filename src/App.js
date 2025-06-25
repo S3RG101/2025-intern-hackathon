@@ -3,12 +3,14 @@ import './App.css';
 import WebcamInput from './webcam';
 import Timer from './timer';
 import ObjectDetection from './ModelComponents/ObjectDetection';
+import TodoList from './todo';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Timer initialMinutes={10}/>
+        <Timer/>
+        <TodoList/>
       </header>
       <header>
         <h1> Testing camera</h1>
