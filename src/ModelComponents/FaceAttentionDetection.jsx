@@ -10,6 +10,7 @@ const FaceAttentionDetection = () => {
     const [detectionInterval, setDetectionInterval] = useState(null);
     const [modelsLoaded, setModelsLoaded] = useState(false);
     const [faceDetected, setFaceDetected] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
     const [stats, setStats] = useState({
         noFaceCount: 0,
         lookingAwayCount: 0,
@@ -50,34 +51,38 @@ const FaceAttentionDetection = () => {
     // Set up detection interval
     useEffect(() => {
         if (isWebcamStarted && modelsLoaded) {
+            // Initialize with a default message
+            if (!distractionMessage) {
+                setDistractionMessage(getDistractionMessage('noFace'));
+            }
             const interval = setInterval(detectDistraction, 500);
             setDetectionInterval(interval);
         } else if (detectionInterval) {
             clearInterval(detectionInterval);
             setDetectionInterval(null);
         }
-    }, [isWebcamStarted, modelsLoaded]);
+    }, [isWebcamStarted, modelsLoaded, distractionMessage]);
 
     // Fun distraction messages
     const getDistractionMessage = (type) => {
         const messages = {
             noFace: [
                 "👻 Where did you go? Your screen misses you!",
-                "🚨 Alert: User vanished. Abducted by aliens? 👽",
-                "📢 Hey! There's work to be done here!",
-                "🌌 The void you left is as big as my to-do list"
+                //"🚨 Alert: User vanished. Abducted by aliens? 👽",
+                //"📢 Hey! There's work to be done here!",
+                //"🌌 The void you left is as big as my to-do list"
             ],
             lookingAway: [
                 "👀 Eyes! Literally, put your eyes here!",
-                "🧐 What's over there that's more interesting than me?",
-                "🔄 Your attention should be here like a magnet to metal",
-                "🎯 Focus, focus, focus... like a laser!"
+                //"🧐 What's over there that's more interesting than me?",
+                //"🔄 Your attention should be here like a magnet to metal",
+                //"🎯 Focus, focus, focus... like a laser!"
             ],
             eyesClosed: [
                 "😴 Sleeping on the job? Wake up, they're paying you!",
-                "💤 The beauty of code isn't appreciated with closed eyes",
-                "🛌 This isn't a hotel, but you seem to have fallen asleep",
-                "🌙 Dreaming about code doesn't count as working on it"
+                //"💤 The beauty of code isn't appreciated with closed eyes",
+                //"🛌 This isn't a hotel, but you seem to have fallen asleep",
+                //"🌙 Dreaming about code doesn't count as working on it"
             ]
         };
 
@@ -112,6 +117,7 @@ const FaceAttentionDetection = () => {
             video.srcObject.getTracks().forEach(track => track.stop());
             setIsWebcamStarted(false);
             setIsDistracted(false);
+            setShowAlert(false);
             setFaceDetected(false);      
             // Clear canvas
             const canvas = canvasRef.current;
@@ -150,10 +156,16 @@ const FaceAttentionDetection = () => {
                 setFaceDetected(false);
                 setStats(prev => ({ ...prev, noFaceCount: prev.noFaceCount + 1 }));
         
-                // Consider distracted if no face for 3+ consecutive detections
-                if (stats.noFaceCount >= 3) {
+                // Consider distracted if no face for 5+ consecutive detections
+                if (stats.noFaceCount >= 5) {
                     setIsDistracted(true);
-                    setDistractionMessage(getDistractionMessage('noFace'));
+                    
+                    // Always update the message when no face is detected
+                    const message = getDistractionMessage('noFace');
+                    console.log("Setting no face message:", message);
+                    setDistractionMessage(message);
+                    
+                    setShowAlert(true);
                 }
 
                 return;
@@ -190,13 +202,22 @@ const FaceAttentionDetection = () => {
             
             if (isCurrentlyDistracted) {
                 setIsDistracted(true);
+                
+                // Always update the message when distraction is detected
                 if (lookingAwayDistracted) {
-                    setDistractionMessage(getDistractionMessage('lookingAway'));
+                    const message = getDistractionMessage('lookingAway');
+                    console.log("Setting looking away message:", message);
+                    setDistractionMessage(message);
                 } else if (eyesClosedDistracted) {
-                    setDistractionMessage(getDistractionMessage('eyesClosed'));
+                    const message = getDistractionMessage('eyesClosed');
+                    console.log("Setting eyes closed message:", message);
+                    setDistractionMessage(message);
                 }
+                
+                setShowAlert(true); // Always show the alert if distracted
             } else {
                 setIsDistracted(false);
+                setShowAlert(false); // Hide the alert if not distracted
             }
         } catch (error) {
             console.error('Error detecting faces:', error);
@@ -262,7 +283,7 @@ const FaceAttentionDetection = () => {
             minHeight: '100vh',
         }}>
             {/* Toast Alert */}
-            {isDistracted && (
+            {showAlert && distractionMessage && (
                 <div className="alert-pulse" style={{
                     position: 'fixed',
                     top: '20px',
@@ -273,7 +294,7 @@ const FaceAttentionDetection = () => {
                     padding: '16px 24px',
                     borderRadius: '12px',
                     boxShadow: '0 8px 32px rgba(255, 71, 87, 0.3)',
-                    zIndex: 1000,
+                    zIndex: 1001,
                     fontSize: '16px',
                     fontWeight: 'bold',
                     display: 'flex',
@@ -325,7 +346,7 @@ const FaceAttentionDetection = () => {
                 </button>
             </div>
 
-            {/* Video y Canvas en tarjeta */}
+            {/* Video and Canvas */}
             <div style={{
                 position: 'relative',
                 margin: '0 auto 32px auto',
@@ -405,10 +426,10 @@ const FaceAttentionDetection = () => {
                 <p style={{
                     fontSize: '1.2rem',
                     fontWeight: 700,
-                    color: (isDistracted || stats.lookingAwayCount >= 3 || stats.eyesClosedCount >= 5) ? '#ff4757' : '#2ed573',
+                    color: (isDistracted || stats.lookingAwayCount >= 3 || stats.eyesClosedCount >= 5 || stats.noFaceCount >= 5) ? '#ff4757' : '#2ed573',
                     marginBottom: '10px',
                 }}>
-                    {(isDistracted || stats.lookingAwayCount >= 3 || stats.eyesClosedCount >= 5) ? '⚠️ Distracted' : '✅ Paying attention'}
+                    {(isDistracted || stats.lookingAwayCount >= 3 || stats.eyesClosedCount >= 5 || stats.noFaceCount >= 5) ? '⚠️ Distracted' : '✅ Paying attention'}
                 </p>
                 <div style={{ display: 'flex', gap: '18px', flexWrap: 'wrap', marginTop: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -462,8 +483,6 @@ const FaceAttentionDetection = () => {
                 </div>
             </div>
 
-
-
             {/* Global styles */}
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
@@ -475,6 +494,12 @@ const FaceAttentionDetection = () => {
                 @keyframes slideDown {
                     from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
                     to { opacity: 1; transform: translateX(-50%) translateY(0); }
+                }
+                .alert-pulse {
+                    animation: slideDown 0.3s ease-out, pulse 2s infinite !important;
+                    display: flex !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
                 }
                 button:hover {
                     opacity: 0.92;
