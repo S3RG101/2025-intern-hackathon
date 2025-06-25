@@ -1,78 +1,96 @@
 import React, { useState, useEffect } from "react";
+import { useAlarm } from "./useAlarm";
+import "./timer-buttons-styling.css";
+import "./potato-wobble.css";
 
-const Timer = () => {
-  const [minutes, setMinutes] = useState(25); // Default to Pomodoro timer
-  const [seconds, setSeconds] = useState(0);
+const TIMER_PRESETS = {
+  Pomodoro: 25 * 60,
+  "Short Break": 5 * 60,
+  "Long Break": 10 * 60,
+};
+
+const Timer = ({ characterSrc = process.env.PUBLIC_URL + '/happyani.png' }) => {
+  const [timerType, setTimerType] = useState("Pomodoro");
+  const [totalSeconds, setTotalSeconds] = useState(TIMER_PRESETS["Pomodoro"]);
   const [isActive, setIsActive] = useState(false);
-  const [timerType, setTimerType] = useState("Pomodoro"); // Track the current timer type
+  const { alarmAudio, playAlarm } = useAlarm(process.env.PUBLIC_URL + "/Alarmtest.mp3");
 
   useEffect(() => {
-    let timer;
-    if (isActive) {
-      timer = setInterval(() => {
-        if (seconds > 0) {
-          setSeconds(seconds - 1);
-        } else if (minutes > 0) {
-          setMinutes(minutes - 1);
-          setSeconds(59);
-        } else {
-          clearInterval(timer);
-          setIsActive(false);
-        }
-      }, 1000);
+    if (!isActive) return;
+    if (totalSeconds <= 0) {
+      setIsActive(false);
+      playAlarm();
+      return;
     }
+    const timer = setInterval(() => {
+      setTotalSeconds((prev) => {
+        if (prev <= 1) {
+          setIsActive(false);
+          playAlarm();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
     return () => clearInterval(timer);
-  }, [isActive, minutes, seconds]);
+  }, [isActive, totalSeconds, playAlarm]);
 
-  const startTimer = () => setIsActive(true);
+  const startTimer = () => {
+    if (totalSeconds > 0) setIsActive(true);
+  };
   const pauseTimer = () => setIsActive(false);
   const resetTimer = () => {
     setIsActive(false);
-    setMinutes(timerType === "Pomodoro" ? 25 : timerType === "Short Break" ? 5 : 10);
-    setSeconds(0);
+    setTotalSeconds(TIMER_PRESETS[timerType]);
   };
 
   const handleMinutesChange = (e) => {
     const value = Math.max(0, parseInt(e.target.value, 10) || 0);
-    setMinutes(value);
-    setSeconds(0); // Reset seconds when minutes are changed
+    setTotalSeconds(value * 60);
   };
 
   const switchTimer = (type) => {
     setTimerType(type);
     setIsActive(false);
-    setMinutes(type === "Pomodoro" ? 25 : type === "Short Break" ? 5 : 10);
-    setSeconds(0);
+    setTotalSeconds(TIMER_PRESETS[type]);
   };
 
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
   return (
-    <div style={{ textAlign: "center" }}>
-      <h2>{timerType} Timer</h2>
-      <div>
+    <div style={{ textAlign: "center", position: 'relative' }}>
+      {alarmAudio}
+      <div className="timer-buttons">
         <button onClick={() => switchTimer("Pomodoro")}>Pomodoro</button>
         <button onClick={() => switchTimer("Short Break")}>Short Break</button>
         <button onClick={() => switchTimer("Long Break")}>Long Break</button>
       </div>
+      <div style={{ margin: '0' }}>
+        <img src={characterSrc} alt="Potato Animation" className="potato-wobble" style={{ width: '110px', height: 'auto', display: 'block', margin: '0 auto', marginBottom: '-10px' }} />
+      </div>
+      <h1 style={{ fontSize: '5em', margin: '0 0 0.2em 0' }}>
+        {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
+      </h1>
       <div>
-        <label htmlFor="minutes-selector">Set Minutes: </label>
+        <label htmlFor="minutes-selector"> custom timer: </label>
         <input
           id="minutes-selector"
           type="number"
-          value={minutes}
+          value={Math.floor(totalSeconds / 60)}
           onChange={handleMinutesChange}
           min="0"
         />
       </div>
-      <h1>
-        {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
-      </h1>
-      <button onClick={startTimer} disabled={isActive}>
-        Start
-      </button>
-      <button onClick={pauseTimer} disabled={!isActive}>
-        Pause
-      </button>
-      <button onClick={resetTimer}>Reset</button>
+      <div className="timer-buttons">
+        <button onClick={startTimer} disabled={isActive || totalSeconds === 0}>
+          Start
+        </button>
+        <button onClick={pauseTimer} disabled={!isActive}>
+          Pause
+        </button>
+        <button onClick={resetTimer}>Reset</button>
+      </div>
     </div>
   );
 };

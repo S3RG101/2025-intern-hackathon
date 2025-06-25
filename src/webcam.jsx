@@ -3,16 +3,15 @@ import React, { useRef, useEffect } from "react";
 const WebcamInput = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const streamRef = useRef(null);
 
   useEffect(() => {
     const startVideo = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         videoRef.current.srcObject = stream;
+        streamRef.current = stream;
         
-        // does not work in chrome browser
-        // videoRef.current.play();
-
         // Handle the play() promise
         const playPromise = videoRef.current.play();
         if (playPromise !== undefined) {
@@ -30,6 +29,18 @@ const WebcamInput = () => {
     };
 
     startVideo();
+    return () => {
+      // Cleanup: stop all tracks and release camera
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => {
+          try { track.stop(); } catch (e) {}
+        });
+        streamRef.current = null;
+      }
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+    };
   }, []);
 
   const processFrame = () => {
