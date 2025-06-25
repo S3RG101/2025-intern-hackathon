@@ -1,0 +1,15 @@
+.timer-buttons button {
+  margin: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: #F08455;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.timer-buttons button:hover {
+  background: #e86228;
+}

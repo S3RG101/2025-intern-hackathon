@@ -1,24 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
-import WebcamInput from './webcam';
-import Timer from './timer';
+import PotatoHeader from './PotatoHeader';
 import ObjectDetection from './ModelComponents/ObjectDetection';
-import TodoList from './todo';
+import React, { useState, useCallback } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <Timer/>
-        <TodoList/>
-      </header>
-      <header>
-        <h1> Testing camera</h1>
-        {/* <WebcamInput /> */}
+  // State to control which character image is shown
+  const [characterSrc, setCharacterSrc] = useState(process.env.PUBLIC_URL + '/happyani.png');
+  // State to control object detection alert/banner
+  const [objectDetectionBanner, setObjectDetectionBanner] = useState(null);
 
-        {/* Adding object detection model */}
-        <ObjectDetection />
-      </header>
+  // Callback to update characterSrc from ObjectDetection
+  const handleDistractionChange = useCallback((distractionDetected, bannerContent) => {
+    if (distractionDetected) {
+      setCharacterSrc(process.env.PUBLIC_URL + '/madani.png');
+    } else {
+      setCharacterSrc(process.env.PUBLIC_URL + '/happyani.png');
+    }
+    setObjectDetectionBanner(bannerContent);
+  }, []);
+  
+  return (
+    <div className="App" style={{ position: 'relative', minHeight: '100vh' }}>
+      {/* Webcam, detection, and Start/Stop button in top left, full logic */}
+      <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 20 }}>
+        <ObjectDetection onDistractionChange={handleDistractionChange} />
+      </div>
+      {/* PotatoHeader with timer and character */}
+      <PotatoHeader characterSrc={characterSrc} objectDetectionBanner={objectDetectionBanner} />
     </div>
   );
 }

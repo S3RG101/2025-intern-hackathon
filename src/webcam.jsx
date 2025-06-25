@@ -5,6 +5,7 @@ import * as faceapi from 'face-api.js';
 const WebcamInput = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const streamRef = useRef(null);
   const [modelsLoaded, setModelsLoaded] = useState(false);
 
   // Load face-api models
@@ -24,7 +25,6 @@ const WebcamInput = () => {
     };
     loadModels();
   }, []);
-
   useEffect(() => {
     const startVideo = async () => {
       try {
@@ -33,10 +33,8 @@ const WebcamInput = () => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         videoRef.current.srcObject = stream;
+        streamRef.current = stream;
         
-        // does not work in chrome browser
-        // videoRef.current.play();
-
         // Handle the play() promise
         const playPromise = videoRef.current.play();
         if (playPromise !== undefined) {
@@ -55,6 +53,18 @@ const WebcamInput = () => {
       }
     };
     startVideo();
+    return () => {
+      // Cleanup: stop all tracks and release camera
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => {
+          try { track.stop(); } catch (e) {}
+        });
+        streamRef.current = null;
+      }
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
