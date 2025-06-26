@@ -1,9 +1,20 @@
 import './App.css';
 import PotatoHeader from './PotatoHeader';
 import ObjectDetection from './ModelComponents/ObjectDetection';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 function App() {
+  // const declared for StudyBuddy
+  const [studyBuddyResponse, setStudyBuddyResponse] = useState('');
+  const [question, setQuestion] = useState('');
+  const [studyNotes, setStudyNotes] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [studyBuddyStatus, setStudyBuddyStatus] = useState('Not initialized');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [studyBuddyChatOpen, setStudyBuddyChatOpen] = useState(false);
+
+
   // State to control which character image is shown
   const [characterSrc, setCharacterSrc] = useState(process.env.PUBLIC_URL + '/happyani.png');
   // State to control object detection alert/banner
@@ -18,7 +29,6 @@ function App() {
     }
     setObjectDetectionBanner(bannerContent);
   }, []);
-  
   return (
     <div className="App" style={{ position: 'relative', minHeight: '100vh' }}>
       {/* Webcam, detection, and Start/Stop button in top left, full logic */}
@@ -27,6 +37,7 @@ function App() {
       </div>
       {/* PotatoHeader with timer and character */}
       <PotatoHeader characterSrc={characterSrc} objectDetectionBanner={objectDetectionBanner} />
+
     </div>
   );
 }
