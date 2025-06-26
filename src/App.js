@@ -2,7 +2,6 @@ import './App.css';
 import PotatoHeader from './PotatoHeader';
 import DistractionDetection from './ModelComponents/DistractionDetection';
 import TodoList from './todo';
-import React, { useState, useCallback } from 'react';
 import React, { useState, useCallback, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import StudyBuddy from './ModelComponents/StudyBuddy';
