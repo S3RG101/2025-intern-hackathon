@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as faceapi from 'face-api.js';
+import * as faceapi from '@vladmandic/face-api';
+import * as tf from '@tensorflow/tfjs';
+import '@tensorflow/tfjs-backend-wasm'; 
 
 const FaceAttentionDetection = ({ onDistractionChange }) => {
     const videoRef = useRef(null);
@@ -21,7 +23,10 @@ const FaceAttentionDetection = ({ onDistractionChange }) => {
     // Load face-api.js models
     useEffect(() => {
         const loadModels = async () => {
-            try {        
+            try {                        
+                await tf.setBackend('wasm');
+                await tf.ready();
+
                 const MODEL_URL = '/face_models';
             
                 await Promise.all([

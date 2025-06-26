@@ -1,6 +1,6 @@
 import './App.css';
 import PotatoHeader from './PotatoHeader';
-//import ObjectDetection from './ModelComponents/ObjectDetection';
+import ObjectDetection from './ModelComponents/ObjectDetection';
 import FaceAttentionDetection from './ModelComponents/FaceAttentionDetection';
 import TodoList from './todo';
 import React, { useState, useCallback } from 'react';
@@ -23,6 +23,11 @@ function App() {
   
   return (
     <div className="App" style={{ position: 'relative', minHeight: '100vh' }}>      
+      {/* Webcam, detection, and Start/Stop button in top left, full logic */}
+      <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 20 }}>
+        <ObjectDetection onDistractionChange={handleDistractionChange} />
+      </div>
+
       {/* Face attention detection component (detects if you're looking away or eyes closed) */}
       <div style={{ position: 'absolute', top: 230, left: 20, zIndex: 20 }}>
         <FaceAttentionDetection onDistractionChange={handleDistractionChange} />
