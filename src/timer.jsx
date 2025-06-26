@@ -67,7 +67,16 @@ const Timer = ({ characterSrc = process.env.PUBLIC_URL + '/happyani.png' }) => {
         <button onClick={() => switchTimer("Long Break")}>Long Break</button>
       </div>
       <div style={{ margin: '0' }}>
-        <img src={characterSrc} alt="Potato Animation" className="potato-wobble" style={{ width: '110px', height: 'auto', display: 'block', margin: '0 auto', marginBottom: '-10px' }} />
+        <img
+          src={characterSrc}
+          alt="Potato Animation"
+          className="potato-wobble"
+          style={{ width: '110px', height: 'auto', display: 'block', margin: '0 auto', marginBottom: '-10px' }}
+          onError={e => { /* In case image decides not to load, the default is happy potatoe animation */
+            e.target.onerror = null;
+            e.target.src = process.env.PUBLIC_URL + '/happyani.png';
+          }}
+        />
       </div>
       <h1 style={{ fontSize: '5em', margin: '0 0 0.2em 0' }}>
         {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
