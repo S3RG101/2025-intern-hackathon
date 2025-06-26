@@ -72,7 +72,7 @@ const Timer = ({ characterSrc = process.env.PUBLIC_URL + '/happyani.png' }) => {
           alt="Potato Animation"
           className="potato-wobble"
           style={{ width: '110px', height: 'auto', display: 'block', margin: '0 auto', marginBottom: '-10px' }}
-          onError={e => { /* In case image decides not to load, the default is happy potatoe animation */
+          onError={e => { /* In case image decides not to load, the default is happy potato animation */
             e.target.onerror = null;
             e.target.src = process.env.PUBLIC_URL + '/happyani.png';
           }}

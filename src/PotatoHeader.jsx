@@ -6,7 +6,7 @@ function PotatoHeader({ characterSrc }) {
     <header
       className="App-header"
       style={{
-        backgroundImage: `url(${process.env.PUBLIC_URL + '/updatedbackground.png'})`,
+        backgroundImage: `url(${process.env.PUBLIC_URL + '/newestbackground.png'})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundColor: 'transparent',
