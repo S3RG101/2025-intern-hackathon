@@ -25,7 +25,15 @@ const DistractionDetection = ({ onDistractionChange }) => {
     const [faceDetected, setFaceDetected] = useState(false);
     const [isDistracted, setIsDistracted] = useState(false);
     const [distractionMessage, setDistractionMessage] = useState('');
+    const [distractionType, setDistractionType] = useState(''); // To show the type of distraction
     const [stats, setStats] = useState({
+        noFaceCount: 0,
+        lookingAwayCount: 0,
+        eyesClosedCount: 0
+    });
+
+    // Ref to maintain current counters without depending on state
+    const statsRef = useRef({
         noFaceCount: 0,
         lookingAwayCount: 0,
         eyesClosedCount: 0
@@ -134,11 +142,19 @@ const DistractionDetection = ({ onDistractionChange }) => {
         setCurrentDistraction('');
         setIsDistracted(false);
         setFaceDetected(false);
+        setDistractionType('');
         setStats({
             noFaceCount: 0,
             lookingAwayCount: 0,
             eyesClosedCount: 0
         });
+        
+        // Reset ref counters
+        statsRef.current = {
+            noFaceCount: 0,
+            lookingAwayCount: 0,
+            eyesClosedCount: 0
+        };
         
         if (onDistractionChange) onDistractionChange(false, null);
     };
@@ -219,7 +235,7 @@ const DistractionDetection = ({ onDistractionChange }) => {
             
             if (anyObjectDistractionDetected) {
                 const message = getObjectDetectionMessage(distractionType);
-                handleDistractionDetected(message);
+                handleDistractionDetected(message, distractionType);
             }
         } catch (err) {
             console.error('Object detection error:', err);
@@ -255,17 +271,19 @@ const DistractionDetection = ({ onDistractionChange }) => {
             if (detections.length === 0) {
                 // No face detected
                 setFaceDetected(false);
-                setStats(prev => ({ ...prev, noFaceCount: prev.noFaceCount + 1 }));
+                statsRef.current.noFaceCount += 1;
+                setStats(prev => ({ ...prev, noFaceCount: statsRef.current.noFaceCount }));
 
-                if (stats.noFaceCount >= 5) {
+                if (statsRef.current.noFaceCount >= 5) {
                     const message = getFaceDetectionMessage('noFace');
-                    handleDistractionDetected(message);
+                    handleDistractionDetected(message, 'noFace');
                 }
                 return;
             }
 
             // Face detected
             setFaceDetected(true);
+            statsRef.current.noFaceCount = 0;
             setStats(prev => ({ ...prev, noFaceCount: 0 }));
 
             const landmarks = detections[0].landmarks;
@@ -275,29 +293,33 @@ const DistractionDetection = ({ onDistractionChange }) => {
             const isLookingAway = checkIfLookingAway(landmarks);
             const eyesClosed = expressions.happy > 0.9 || checkIfEyesClosed(landmarks);
 
-            // Update counters
+            // Update counters using ref for immediate access
             if (isLookingAway) {
-                setStats(prev => ({ ...prev, lookingAwayCount: prev.lookingAwayCount + 1 }));
+                statsRef.current.lookingAwayCount += 1;
+                setStats(prev => ({ ...prev, lookingAwayCount: statsRef.current.lookingAwayCount }));
             } else {
+                statsRef.current.lookingAwayCount = 0;
                 setStats(prev => ({ ...prev, lookingAwayCount: 0 }));
             }
 
             if (eyesClosed) {
-                setStats(prev => ({ ...prev, eyesClosedCount: prev.eyesClosedCount + 1 }));
+                statsRef.current.eyesClosedCount += 1;
+                setStats(prev => ({ ...prev, eyesClosedCount: statsRef.current.eyesClosedCount }));
             } else {
+                statsRef.current.eyesClosedCount = 0;
                 setStats(prev => ({ ...prev, eyesClosedCount: 0 }));
             }
 
-            // Determine if distracted
-            const lookingAwayDistracted = stats.lookingAwayCount >= 3;
-            const eyesClosedDistracted = stats.eyesClosedCount >= 5;
+            // Determine if distracted using ref values for immediate access
+            const lookingAwayDistracted = statsRef.current.lookingAwayCount >= 3;
+            const eyesClosedDistracted = statsRef.current.eyesClosedCount >= 5;
             
             if (lookingAwayDistracted) {
                 const message = getFaceDetectionMessage('lookingAway');
-                handleDistractionDetected(message);
+                handleDistractionDetected(message, 'lookingAway');
             } else if (eyesClosedDistracted) {
                 const message = getFaceDetectionMessage('eyesClosed');
-                handleDistractionDetected(message);
+                handleDistractionDetected(message, 'eyesClosed');
             } else {
                 // No face distraction detected
                 if (!showAlert) { // Only clear if no other distractions
@@ -310,11 +332,12 @@ const DistractionDetection = ({ onDistractionChange }) => {
     };
 
     // Handle distraction detected
-    const handleDistractionDetected = (message) => {
+    const handleDistractionDetected = (message, type = '') => {
         setCurrentDistraction(message);
         setShowAlert(true);
         setIsDistracted(true);
         setDistractionMessage(message);
+        setDistractionType(type);
         
         if (onDistractionChange) {
         const banner = (
@@ -354,6 +377,7 @@ const DistractionDetection = ({ onDistractionChange }) => {
         setShowAlert(false);
         setCurrentDistraction('');
         setIsDistracted(false);
+        setDistractionType('');
         
         if (onDistractionChange) {
         onDistractionChange(false, null);
@@ -416,29 +440,7 @@ const DistractionDetection = ({ onDistractionChange }) => {
             }}
         >
             {isWebcamStarted ? "Stop" : "Start"} Distraction Detection
-        </button>
-
-        {/* Detection toggles */}
-        {isWebcamStarted && (
-            <div style={{ marginBottom: '8px', display: 'flex', gap: '8px', flexDirection: 'column' }}>
-            <label style={{ fontSize: '12px', color: '#333', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <input 
-                type="checkbox" 
-                checked={objectDetectionEnabled} 
-                onChange={(e) => setObjectDetectionEnabled(e.target.checked)}
-                />
-                Object Detection
-            </label>
-            <label style={{ fontSize: '12px', color: '#333', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <input 
-                type="checkbox" 
-                checked={faceDetectionEnabled} 
-                onChange={(e) => setFaceDetectionEnabled(e.target.checked)}
-                />
-                Face Detection
-            </label>
-            </div>
-        )}
+        </button>        
 
         {/* Video display */}
         {isWebcamStarted && (
@@ -499,6 +501,57 @@ const DistractionDetection = ({ onDistractionChange }) => {
             }}>
                 Models: {modelsLoaded ? 'Loaded' : 'Loading...'}
             </span>
+            </div>
+        )}
+
+        {/* Distraction status label */}
+        {isWebcamStarted && (
+            <div style={{ 
+            marginTop: '8px', 
+            padding: '8px 12px',
+            borderRadius: '8px',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            maxWidth: '180px',
+            textAlign: 'center',
+            border: '2px solid',
+            background: isDistracted ? '#ff4757' : '#2ed573',
+            borderColor: isDistracted ? '#ff3742' : '#26de5c',
+            color: 'white',
+            boxShadow: isDistracted ? '0 4px 12px rgba(255, 71, 87, 0.3)' : '0 4px 12px rgba(46, 213, 115, 0.3)'
+            }}>
+            {isDistracted ? (
+                <div>
+                <div>🚨 DISTRACTION</div>
+                <div style={{ fontSize: '10px', marginTop: '4px', opacity: 0.9 }}>
+                    {distractionType === 'phone' && '📱 Phone'}
+                    {distractionType === 'pet' && '🐕 Pet'}
+                    {distractionType === 'people' && '👫 People'}
+                    {distractionType === 'noFace' && '👻 No Face'}
+                    {distractionType === 'lookingAway' && '👀 Looking Away'}
+                    {distractionType === 'eyesClosed' && '😴 Eyes Closed'}
+                </div>
+                </div>
+            ) : (
+                <div>✅ FOCUSED</div>
+            )}
+            </div>
+        )}
+
+        {/* Debug counters (optional) */}
+        {isWebcamStarted && faceDetectionEnabled && (
+            <div style={{ 
+            marginTop: '8px', 
+            fontSize: '9px',
+            color: '#666',
+            background: '#f8f9fa',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            lineHeight: '1.3'
+            }}>
+            <div>No face: {stats.noFaceCount}/5</div>
+            <div>Looking away: {stats.lookingAwayCount}/3</div>
+            <div>Eyes closed: {stats.eyesClosedCount}/5</div>
             </div>
         )}
         </div>
