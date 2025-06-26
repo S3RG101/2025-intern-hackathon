@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Timer from './timer';
 
-function PotatoHeader({ characterSrc, objectDetectionBanner }) {
+function PotatoHeader({ characterSrc }) {
   return (
     <header
       className="App-header"
@@ -20,10 +20,6 @@ function PotatoHeader({ characterSrc, objectDetectionBanner }) {
         position: 'relative',
       }}
     >
-      {/* Object detection banner above timer */}
-      {objectDetectionBanner && (
-        <div style={{ marginBottom: '16px', zIndex: 100 }}>{objectDetectionBanner}</div>
-      )}
       <Timer characterSrc={characterSrc} />
     </header>
   );

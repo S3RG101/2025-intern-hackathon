@@ -21,12 +21,19 @@ function App() {
   
   return (
     <div className="App" style={{ position: 'relative', minHeight: '100vh' }}>
+      {/* Render the banner at the top level so it overlays everything */}
+      {objectDetectionBanner && React.cloneElement(objectDetectionBanner, {
+        style: {
+          ...objectDetectionBanner.props.style,
+          top: 120, // Move the banner lower (closer to the timer)
+        }
+      })}
       {/* Webcam, detection, and Start/Stop button in top left, full logic */}
       <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 20 }}>
         <ObjectDetection onDistractionChange={handleDistractionChange} />
       </div>
       {/* PotatoHeader with timer and character */}
-      <PotatoHeader characterSrc={characterSrc} objectDetectionBanner={objectDetectionBanner} />
+      <PotatoHeader characterSrc={characterSrc} />
     </div>
   );
 }
