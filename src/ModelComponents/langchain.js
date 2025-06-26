@@ -341,7 +341,7 @@ export async function initializeStudyBuddy(documentsText = "") {
             }
         }
         
-        return "✅ StudyBuddy initialized. Use 'loadDocuments()' to load your notes.";
+        return "✅ StudyBuddy initialized.";
     } catch (error) {
         console.error('Error initializing StudyBuddy:', error);
         return "❌ Error initializing StudyBuddy: " + error.message;

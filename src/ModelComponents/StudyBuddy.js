@@ -109,14 +109,14 @@ function StudyBuddy({
         onClick={handleSidebarToggle}
         style={{
           position: 'fixed',
-          top: '20px',
-          left: sidebarOpen ? (studyBuddyChatOpen ? '620px' : '300px') : '20px',
+          bottom: '20px',
+          left: sidebarOpen ? (studyBuddyChatOpen ? '630px' : '300px') : '20px',
           zIndex: 1001,
           backgroundColor: '#1a1a1a',
           color: 'white',
           border: '1px solid #333',
           borderRadius: '12px',
-          width: '48px',
+          width: sidebarOpen ? '50px' : '150px',
           height: '48px',
           fontSize: '18px',
           cursor: 'pointer',
@@ -136,7 +136,7 @@ function StudyBuddy({
           e.target.style.transform = 'scale(1)';
         }}
       >
-        {sidebarOpen ? '✕' : '☰'}
+        {sidebarOpen ? '✕' : 'StudyBuddy AI'}
       </button>
 
       {/* Modern Sidebar */}
@@ -344,7 +344,8 @@ function StudyBuddy({
           <div style={{
             padding: '16px',
             borderBottom: '1px solid #404040',
-            backgroundColor: '#3a3a3a'
+            backgroundColor: '#3a3a3a',
+            paddingRight:'25px'
           }}>
             <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: '#ffffff' }}>
               📄 Load PDFs
