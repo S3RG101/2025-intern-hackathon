@@ -274,6 +274,52 @@ You are StudyBuddy, a visual learning assistant. Create ASCII diagrams, flowchar
         }
     }
 
+    async generateExamQuestions(topic) {
+        if (!this.retrievalChain) {
+            return "Error: No documents have been loaded. Please load your notes first.";
+        }
+
+        try {
+            const examPrompt = ChatPromptTemplate.fromTemplate(`
+### Role and Objective:
+You are an exam generator. Your task is to create a short, 3-question exam based on the provided context. Each question should be followed by its answer.
+
+### Instructions:
+1.  **Generate 3 questions** based on the most important concepts in the context.
+2.  **Provide concise answers** for each question.
+3.  **Format the output** clearly, with "Question:" and "Answer:" for each item.
+
+### Context:
+{context}
+
+### Topic for Exam:
+{question}
+
+### Generated Exam:
+`);
+
+            const retriever = this.vectorStore.asRetriever({ k: 4 });
+            const examChain = RunnableSequence.from([
+                {
+                    context: async (input) => {
+                        const docs = await retriever.invoke(input.question);
+                        return docs.map(doc => doc.pageContent || '').join('\n\n');
+                    },
+                    question: (input) => input.question,
+                },
+                examPrompt,
+                this.llm,
+            ]);
+
+            const response = await examChain.invoke({ question: topic });
+            console.log("Generated Exam Response:", response);
+            return response.content;
+        } catch (error) {
+            console.error('Error generating exam:', error);
+            return 'Sorry, I could not generate an exam at this time.';
+        }
+    }
+
     async createSummaryDetailed(topic) {
         // Enhanced summary method with detailed prompts
         if (!this.retrievalChain) {
@@ -394,4 +440,11 @@ export async function askQuestionSpecialized(question) {
         return "Error: StudyBuddy is not initialized.";
     }
     return await studyBuddyInstance.askQuestion(question);
+}
+
+export async function generateExam(topic) {
+    if (!studyBuddyInstance) {
+        return "Error: StudyBuddy is not initialized.";
+    }
+    return await studyBuddyInstance.generateExamQuestions(topic);
 }

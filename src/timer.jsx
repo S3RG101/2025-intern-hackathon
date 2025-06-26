@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAlarm } from "./useAlarm";
 import "./timer-buttons-styling.css";
 import "./potato-wobble.css";
+import Exam from "./ModelComponents/Exam";
 
 const TIMER_PRESETS = {
   Pomodoro: 25 * 60,
@@ -14,6 +15,7 @@ const Timer = ({ characterSrc = process.env.PUBLIC_URL + '/happyani.png' }) => {
   const [totalSeconds, setTotalSeconds] = useState(TIMER_PRESETS["Pomodoro"]);
   const [isActive, setIsActive] = useState(false);
   const { alarmAudio, playAlarm } = useAlarm(process.env.PUBLIC_URL + "/Alarmtest.mp3");
+  const [isTimeUp, setIsTimeUp] = useState(false);
 
   useEffect(() => {
     if (!isActive) return;
@@ -27,6 +29,7 @@ const Timer = ({ characterSrc = process.env.PUBLIC_URL + '/happyani.png' }) => {
         if (prev <= 1) {
           setIsActive(false);
           playAlarm();
+          setIsTimeUp(true);
           return 0;
         }
         return prev - 1;
@@ -54,6 +57,16 @@ const Timer = ({ characterSrc = process.env.PUBLIC_URL + '/happyani.png' }) => {
     setIsActive(false);
     setTotalSeconds(TIMER_PRESETS[type]);
   };
+
+  const handleBackToTimer = () => {
+    setIsTimeUp(false);
+    resetTimer();
+  };
+
+  if (isTimeUp) {
+    console.log("TIME OVER")
+    return <Exam onBack={handleBackToTimer} />;
+  }
 
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
