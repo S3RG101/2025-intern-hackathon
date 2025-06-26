@@ -14,7 +14,6 @@ class StudyBuddyAssistant {
         embeddingsDeploymentName = process.env.REACT_APP_AZURE_OPENAI_DEPLOYMENT_EMBEDDING,
         temperature = 0.3
     } = {}) {
-        const deploymentName = 'gpt-4.1';
 
         // LLM
         this.llm = new AzureChatOpenAI({
