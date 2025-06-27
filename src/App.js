@@ -72,6 +72,19 @@ function App() {
       <PotatoHeader characterSrc={characterSrc} objectDetectionBanner={objectDetectionBanner} />
 
       <TodoList/>
+      {/* Spotify playlist embed below the to-do list */}
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: 24, marginBottom: 32 }}>
+        <iframe
+          style={{ borderRadius: 12 }}
+          src="https://open.spotify.com/embed/playlist/6fF3jCxdGRy8GGKdhpIuyO?utm_source=generator"
+          width="340"
+          height="152"
+          frameBorder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+          title="Spotify Playlist"
+        ></iframe>
+      </div>
     </div>
   );
 }
