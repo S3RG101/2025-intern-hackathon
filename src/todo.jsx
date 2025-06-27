@@ -46,7 +46,7 @@ const TodoList = () => {
 
   return (
     <div style={{ maxWidth: "500px", margin: "0 auto", padding: "20px" }}>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Todo List</h2>
+      <h1 style={{ textAlign: "center"}}>Todo List</h1>
       
       {/* Input section */}
       <div style={{ display: "flex", marginBottom: "20px", gap: "10px" }}>
@@ -66,6 +66,15 @@ const TodoList = () => {
         />
         <button
           onClick={addTodo}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#F08455",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontSize: "1rem",
+          }}
         >
           Add
         </button>
@@ -85,10 +94,19 @@ const TodoList = () => {
                   onChange={() => toggleComplete(todo.id)}
                   style={{ cursor: "pointer" }}
                 />
-                <span style={{ fontSize: "16px" }}>{todo.text}</span>
+                <span style={{ fontSize: "20px" }}>{todo.text}</span>
               </div>
               <button
-                onClick={() => deleteTodo(todo.id)}>
+                onClick={() => deleteTodo(todo.id)}
+                style={{
+                  backgroundColor: "#F08455",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "8px",
+                  padding: "5px 10px",
+                  cursor: "pointer",
+                  fontSize: "1rem",
+                }}>
                 Delete
               </button>
             </div>
