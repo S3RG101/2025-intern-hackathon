@@ -11,7 +11,7 @@ Pomotato is an adorable, AI-powered potato-themed productivity app that reimagin
 - Vibe to music: Pomotato-approved Spotify beats optimize focus during study sessions and allow you to vibe during well-earned breaks.
 
 ## How to set up Study Budy AI Chat Bot
-To use the Study Buddy AI agent, you will need to create a `.env` with these variables:
+To use the Study Buddy AI agent locally, you will need to create a `.env` with these variables:
 ```
 REACT_APP_AZURE_OPENAI_API_KEY = '<YOURKEYHERE>'
 REACT_APP_AZURE_OPENAI_ENDPOINT = 'hackathon2025podomoro'
