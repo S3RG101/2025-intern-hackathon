@@ -52,7 +52,8 @@ function SpotifyCallback() {
           console.log("Spotify token response:", data);
           if (data.access_token) {
             localStorage.setItem("spotify_access_token", data.access_token);
-            navigate("/");
+            // navigate("/");
+            window.location = "/"; // <-- Force reload so components re-mount and see the token
           } else {
             alert("Failed to get access token: " + JSON.stringify(data));
           }

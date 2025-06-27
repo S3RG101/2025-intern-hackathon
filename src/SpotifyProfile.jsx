@@ -5,13 +5,17 @@ function SpotifyProfile() {
 
   useEffect(() => {
     const token = localStorage.getItem("spotify_access_token");
-    if (token) {
-      fetch("https://api.spotify.com/v1/me", {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(res => res.json())
-        .then(data => setProfile(data));
+    if(!token) {
+      console.error("No Spotify access token found");
+      return;
     }
+
+    fetch("https://api.spotify.com/v1/me", {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => setProfile(data));
+  
   }, []);
 
   if (!profile) return null;
@@ -24,6 +28,7 @@ function SpotifyProfile() {
       )}
       <p>Spotify ID: {profile.id}</p>
       <p>Email: {profile.email}</p>
+      {/* update link spotify button to logout button */}
     </div>
   );
 }

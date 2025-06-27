@@ -8,6 +8,8 @@ import DistractionDetection from './ModelComponents/DistractionDetection';
 import TodoList from './todo';
 
 import StudyBuddy from './ModelComponents/StudyBuddy';
+import SpotifyButton from './SpotifyIntegration';
+import SpotifyProfile from './SpotifyProfile';
 
 
 function App() {
@@ -85,6 +87,8 @@ function App() {
           title="Spotify Playlist"
         ></iframe>
       </div>
+      <SpotifyButton/>
+      <SpotifyProfile/>
     </div>
   );
 }

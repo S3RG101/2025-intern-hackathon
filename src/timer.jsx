@@ -39,7 +39,10 @@ const Timer = ({ characterSrc = process.env.PUBLIC_URL + '/happyani.png' }) => {
   }, [isActive, totalSeconds, playAlarm]);
 
   const startTimer = () => {
-    if (totalSeconds > 0) setIsActive(true);
+    if (totalSeconds > 0) {
+      setIsActive(true);
+      generateSoundtrack(totalSeconds, timerType);
+    }
   };
   const pauseTimer = () => setIsActive(false);
   const resetTimer = () => {
@@ -70,6 +73,62 @@ const Timer = ({ characterSrc = process.env.PUBLIC_URL + '/happyani.png' }) => {
 
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
+
+  // Helper: Map timer type to Spotify genre or mood
+  const TIMER_GENRES = {
+    Pomodoro: "rock",
+    "Short Break": "pop",
+    "Long Break": "rock"
+  };
+
+  async function generateSoundtrack(totalSeconds, timerType) {
+    const token = localStorage.getItem("spotify_access_token");
+    if (!token) {
+      alert("Please link your Spotify account first!");
+      return;
+    }
+
+    // 1. Fetch recommended tracks
+    const genre = TIMER_GENRES[timerType] || "chill";
+    const url = `https://api.spotify.com/v1/recommendations?seed_genres=${genre}&limit=100`;
+    console.log(`Fetching tracks for genre: ${genre} from URL: ${url}`);
+    
+    const response = await fetch(url,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      alert(`Failed to fetch tracks: ${response.status} ${response.statusText}\n${errorText}`);
+      return;
+    }
+
+    const data = await response.json();
+
+    // 2. Select enough tracks to fill the timer
+    let tracks = [];
+    let sum = 0;
+    const timerDurationMs = totalSeconds * 1000;
+    for (const track of data.tracks) {
+      if (sum >= timerDurationMs) break;
+      tracks.push(track.uri);
+      sum += track.duration_ms;
+    }
+
+    if (tracks.length === 0) {
+      alert("Couldn't find enough tracks for this session.");
+      return;
+    }
+
+    // 3. Start playback on user's active device
+    await fetch('https://api.spotify.com/v1/me/player/play', {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uris: tracks })
+    });
+
+    alert("Your Pomodoro soundtrack is playing on your active Spotify device!");
+  }
 
   return (
     <div style={{ textAlign: "center", position: 'relative' }}>
@@ -112,6 +171,9 @@ const Timer = ({ characterSrc = process.env.PUBLIC_URL + '/happyani.png' }) => {
           Pause
         </button>
         <button onClick={resetTimer}>Reset</button>
+        <button onClick={() => generateSoundtrack(totalSeconds, timerType)}>
+          Generate Soundtrack
+        </button>
       </div>
     </div>
   );
