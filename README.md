@@ -19,6 +19,10 @@ REACT_APP_AZURE_OPENAI_DEPLOYMENT_EMBEDDING = 'text-embedding-3-small'
 Make sure to edit `<YOURKEYHERE>` to an active Azure OpenAI API key. The chat panel expands when the user clicks the "StudyBuddy AI" button - the sidebar appears over the main content. The ChatGPT instance was set up in Azure.
 
 ## Images!
+![Screenshot 2025-06-26 222702](https://github.com/user-attachments/assets/75cf1dd7-1170-464b-839e-245194f8efd3)
+![Screenshot 2025-06-26 223853](https://github.com/user-attachments/assets/c9b3167b-60b1-4730-bec7-5f7b259061ca)
+![Screenshot 2025-06-26 223243](https://github.com/user-attachments/assets/61f09356-af1a-4742-a0f3-6ea97272f03e)
+![Screenshot 2025-06-26 223111](https://github.com/user-attachments/assets/bf584730-d555-4153-96d5-ed84e2dce501)
 
 # General React App information
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
