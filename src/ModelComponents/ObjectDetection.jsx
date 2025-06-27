@@ -17,6 +17,20 @@ const ObjectDetection = ({ onDistractionChange }) => {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         videoRef.current.srcObject = stream;
         streamRef.current = stream;
+        // Always try to play the video after setting srcObject
+        setTimeout(() => {
+          if (videoRef.current && videoRef.current.paused) {
+            const playPromise = videoRef.current.play();
+            if (playPromise && typeof playPromise.then === 'function') {
+              playPromise.catch((e) => {
+              // Suppress play() interruption errors
+              if (e.name !== 'AbortError' && e.name !== 'NotAllowedError') {
+                console.warn('Video play() error:', e);
+              }
+            });
+          }
+        }
+      }, 0);
       }
       if (!detectionIntervalRef.current) {
         detectionIntervalRef.current = setInterval(predictObject, 500);
@@ -141,7 +155,24 @@ const ObjectDetection = ({ onDistractionChange }) => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', position: 'absolute', top: 24, left: 24, zIndex: 2000 }}>
-      <button onClick={() => setIsWebcamStarted((prev) => !prev)} style={{ marginBottom: '8px' }}>
+      <button 
+        onClick={() => setIsWebcamStarted((prev) => !prev)} 
+        style={{ 
+          marginBottom: '8px', 
+          background: '#e86228', // Dark orange to match timer button hover
+          color: '#fff', // White text
+          border: 'none',
+          borderRadius: '8px',
+          padding: '12px 28px',
+          fontSize: '1.1rem',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          transition: 'background 0.2s',
+        }}
+        onMouseOver={e => e.currentTarget.style.background = '#F08455'}
+        onMouseOut={e => e.currentTarget.style.background = '#e86228'}
+      >
         {isWebcamStarted ? "Stop" : "Start"} Webcam
       </button>
       {isWebcamStarted && (
@@ -153,7 +184,7 @@ const ObjectDetection = ({ onDistractionChange }) => {
             width: 160,
             height: 120,
             borderRadius: 8,
-            border: '2px solid #ff4757',
+            border: '2px solid #72482a', // Changed to brown frame
             background: '#222',
           }}
         />
