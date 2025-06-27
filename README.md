@@ -1,5 +1,15 @@
-# Lock In!
+# Welcome to Pomotato!🥔⏰🧠📖
 
+Pomotato is an adorable, AI-powered potato-themed productivity app that reimagines the Pomodoro technique into a dynamic, distraction-free learning experience. It combines a playful interface with gamified accountability, gentle nudges, and cutting-edge AI to help students stay focused, motivated, and focused on their goals.
+
+- Study Buddy AI: define learning objectives and receive personalized self-assessments after each sessions, enhance comprehension by generating diagrams, summaries, and explanations directly from user notes. Powered by Chat GPT 4.1.
+- 
+
+## How to set up Study Budy AI Chat Bot
+
+## Images!
+
+# General React App information
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
