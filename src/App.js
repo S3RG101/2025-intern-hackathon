@@ -43,6 +43,8 @@ function App() {
       
       {/* PotatoHeader with timer and character */}
       <PotatoHeader characterSrc={characterSrc} objectDetectionBanner={objectDetectionBanner} />
+
+      <TodoList/>
     </div>
   );
 }
