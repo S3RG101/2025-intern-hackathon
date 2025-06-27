@@ -431,7 +431,7 @@ const DistractionDetection = ({ onDistractionChange }) => {
             style={{ 
             marginBottom: '8px',
             padding: '8px 16px',
-            background: isWebcamStarted ? '#ff4757' : '#2ed573',
+            background: isWebcamStarted ? '#ff4757' : '#F08455',
             color: 'white',
             border: 'none',
             borderRadius: '6px',
