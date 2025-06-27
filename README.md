@@ -8,9 +8,15 @@ Pomotato is an adorable, AI-powered potato-themed productivity app that reimagin
 - Don't get distracted: Pomotato employs deep learning models for real-time object recognition and face detection. Whether you're chatting, using your phone, or joined by a pet, our Distraction Detector triggers an animated angry potato, sound effects and notifications, to remind you to get back on track!
 - Vibe to music: Pomotato-approved Spotify beats optimize focus during study sessions and allow you to vibe during well-earned breaks.
 
-- 
-
 ## How to set up Study Budy AI Chat Bot
+To use the Study Buddy AI agent, you will need to create a `.env` with these variables:
+```
+REACT_APP_AZURE_OPENAI_API_KEY = '<YOURKEYHERE>'
+REACT_APP_AZURE_OPENAI_ENDPOINT = 'hackathon2025podomoro'
+REACT_APP_AZURE_OPENAI_DEPLOYMENT = 'gpt-4.1'
+REACT_APP_AZURE_OPENAI_DEPLOYMENT_EMBEDDING = 'text-embedding-3-small'
+```
+The chat panel expands when the user clicks the "StudyBuddy AI" button - the sidebar appears over the main content. The ChatGPT instance was set up in Azure.
 
 ## Images!
 
