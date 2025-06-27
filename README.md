@@ -1,5 +1,6 @@
 # Welcome to Pomotato!🥔⏰🧠📖
-![Untitled design (4)](https://github.com/user-attachments/assets/f2684a00-c2f5-4ecf-a313-6ecc685303af)
+![Untitled design (4) (1)](https://github.com/user-attachments/assets/b7d9f590-ad81-4550-8974-f96d029e87ac)
+
 
 Pomotato is an adorable, AI-powered potato-themed productivity app that reimagines the Pomodoro technique into a dynamic, distraction-free learning experience. It combines a playful interface with gamified accountability, gentle nudges, and cutting-edge AI to help students stay focused, motivated, and focused on their goals.
 
