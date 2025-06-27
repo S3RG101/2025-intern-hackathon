@@ -1,9 +1,21 @@
 import './App.css';
 import PotatoHeader from './PotatoHeader';
+<<<<<<< HEAD
 import ObjectDetection from './ModelComponents/ObjectDetection';
 import React, { useState, useCallback, useRef } from 'react';
+=======
+import DistractionDetection from './ModelComponents/DistractionDetection';
+import TodoList from './todo';
+import React, { useState, useCallback, useEffect } from 'react';
+
+import StudyBuddy from './ModelComponents/StudyBuddy';
+>>>>>>> 1699dfe84ec887a4db263c4c87858ee25297dffe
 
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [studyBuddyChatOpen, setStudyBuddyChatOpen] = useState(false);
+
+
   // State to control which character image is shown
   const [characterSrc, setCharacterSrc] = useState(process.env.PUBLIC_URL + '/happyani.png');
   // State to control object detection alert/banner
@@ -30,8 +42,9 @@ function App() {
     prevDistractionRef.current = distractionDetected;
   }, []);
   
-  return (
+  return (             
     <div className="App" style={{ position: 'relative', minHeight: '100vh' }}>
+<<<<<<< HEAD
       {/* Audio element for distraction alert */}
       <audio ref={alertAudioRef} src={process.env.PUBLIC_URL + '/amogus-distractionalert.mp3'} preload="auto" />
       {/* Render the banner at the top level so it overlays everything */}
@@ -41,10 +54,21 @@ function App() {
           top: 120, // Move the banner lower (closer to the timer)
         }
       })}
+=======
+      <StudyBuddy
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        studyBuddyChatOpen={studyBuddyChatOpen}
+        setStudyBuddyChatOpen={setStudyBuddyChatOpen}
+      />
+
+>>>>>>> 1699dfe84ec887a4db263c4c87858ee25297dffe
       {/* Webcam, detection, and Start/Stop button in top left, full logic */}
+      {/* Unified distraction detection component */}
       <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 20 }}>
-        <ObjectDetection onDistractionChange={handleDistractionChange} />
+        <DistractionDetection onDistractionChange={handleDistractionChange} />
       </div>
+      
       {/* PotatoHeader with timer and character */}
       <PotatoHeader characterSrc={characterSrc} />
     </div>
