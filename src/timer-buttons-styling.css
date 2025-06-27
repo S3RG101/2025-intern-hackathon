@@ -1,11 +1,11 @@
 .timer-buttons button {
-  margin: 8px;
-  padding: 10px 20px;
-  border-radius: 8px;
+  margin: 12px;
+  padding: 18px 40px; /*changes size of orange buttons*/
+  border-radius: 12px;
   border: none;
   background: #F08455;
   color: #fff;
-  font-size: 1rem;
+  font-size: 1.5rem;
   cursor: pointer;
   transition: background 0.2s;
 }
