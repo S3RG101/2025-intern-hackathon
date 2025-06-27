@@ -2,7 +2,12 @@
 
 Pomotato is an adorable, AI-powered potato-themed productivity app that reimagines the Pomodoro technique into a dynamic, distraction-free learning experience. It combines a playful interface with gamified accountability, gentle nudges, and cutting-edge AI to help students stay focused, motivated, and focused on their goals.
 
-- Study Buddy AI: define learning objectives and receive personalized self-assessments after each sessions, enhance comprehension by generating diagrams, summaries, and explanations directly from user notes. Powered by Chat GPT 4.1.
+## Features
+
+- Study Buddy AI: Define learning objectives and receive personalized self-assessments after each sessions, enhance comprehension by generating diagrams, summaries, and explanations directly from user notes. Powered by Chat GPT 4.1.
+- Don't get distracted: Pomotato employs deep learning models for real-time object recognition and face detection. Whether you're chatting, using your phone, or joined by a pet, our Distraction Detector triggers an animated angry potato, sound effects and notifications, to remind you to get back on track!
+- Vibe to music: Pomotato-approved Spotify beats optimize focus during study sessions and allow you to vibe during well-earned breaks.
+
 - 
 
 ## How to set up Study Budy AI Chat Bot
