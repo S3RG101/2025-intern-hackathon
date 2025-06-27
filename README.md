@@ -16,7 +16,7 @@ REACT_APP_AZURE_OPENAI_ENDPOINT = 'hackathon2025podomoro'
 REACT_APP_AZURE_OPENAI_DEPLOYMENT = 'gpt-4.1'
 REACT_APP_AZURE_OPENAI_DEPLOYMENT_EMBEDDING = 'text-embedding-3-small'
 ```
-The chat panel expands when the user clicks the "StudyBuddy AI" button - the sidebar appears over the main content. The ChatGPT instance was set up in Azure.
+Make sure to edit `<YOURKEYHERE>` to an active Azure OpenAI API key. The chat panel expands when the user clicks the "StudyBuddy AI" button - the sidebar appears over the main content. The ChatGPT instance was set up in Azure.
 
 ## Images!
 
