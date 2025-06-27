@@ -19,18 +19,18 @@ const ObjectDetection = ({ onDistractionChange }) => {
         streamRef.current = stream;
         // Always try to play the video after setting srcObject
         setTimeout(() => {
-          if (videoRef.current) {
+          if (videoRef.current && videoRef.current.paused) {
             const playPromise = videoRef.current.play();
             if (playPromise && typeof playPromise.then === 'function') {
               playPromise.catch((e) => {
-                // Suppress play() interruption errors
-                if (e.name !== 'AbortError' && e.name !== 'NotAllowedError') {
-                  console.warn('Video play() error:', e);
-                }
-              });
-            }
+              // Suppress play() interruption errors
+              if (e.name !== 'AbortError' && e.name !== 'NotAllowedError') {
+                console.warn('Video play() error:', e);
+              }
+            });
           }
-        }, 0);
+        }
+      }, 0);
       }
       if (!detectionIntervalRef.current) {
         detectionIntervalRef.current = setInterval(predictObject, 500);
